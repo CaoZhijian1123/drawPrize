@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../static/favicon.ico" th:href="@{/favicon.ico}">
+
+    <title>Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/assets/css/dashboard.css" th:href="@{/assets/css/dashboard.css}" rel="stylesheet">
+
+
+    <script type="text/javascript" src="../../static/assets/js/jquery.min.js"
+            th:src="@{/assets/js/jquery.min.js}"></script>
+
+
+</head>
+
+<body data-gr-c-s-loaded="true" onload="refresh()">
+
+
+<div th:replace="~{common/bar :: navbar}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="common/bar:: nav-sidebar(menu='activity') "></div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+            <h1 class="sub-header">活动管理</h1>
+            <a href="/admin/activity/edit" class="btn btn-primary">编辑</a>
+            <br/><br/>
+
+
+            <div class="table-responsive">
+
+
+                <div class="jumbotron">
+                    <h1 class="display-4">活动信息</h1>
+                    <p class="lead" th:text="${activity.name}">欢迎参与清华大学第二十六届结构设计大赛，让我们重逢在天际云端!</p>
+                    <small class="form-text text-muted" th:text="'活动创建时间：'+${activity.createDate}">活动创建时间：</small>
+                    <br>
+                    <small class="form-text text-muted" th:text="'二维码链接地址：'+${activity.codeLink}">二维码链接：</small>
+                    <hr class="my-4"/>
+                    <p th:text="${activity.note}">
+                        清华大学结构设计大赛始创于1994年，迄今已历二十五届。经过二十多年的发展，大赛已经成为校内影响最大、参与人数最多的大规模科技赛事之一，在国内乃至国际工程教育界也具有一定的影响力。</p>
+                    <hr class="my-4"/>
+                    <p th:text="${activity.open==0?'当前活动已关闭':'当前活动已开放'}"></p>
+                    <a class="btn btn-success" href="/admin/activity/1" th:href="@{/admin/activity/1}"
+                       th:if="${activity.open==0}">打开</a>
+                    <a class="btn btn-danger" href="/admin/activity/0" th:href="@{/admin/activity/0}"
+                       th:if="${activity.open!=0}">关闭</a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="./assets/js/jquery.min.js" th:src="@{/assets/js/jquery.min.js}"></script>
+<script>window.jQuery || document.write('<script src="../static/assets/js/jquery.min.js" th:src="@{/assets/js/jquery.min.js}"><\/script>')</script>
+<script src="../static/assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="../static/assets/js/holder.min.js" th:src="@{/assets/js/holder.min.js}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../static/assets/js/ie10-viewport-bug-workaround.js"
+        th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>time</title>
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel='stylesheet' href='../static/assets/css/time/splitting.css' th:href="@{/assets/css/time/splitting.css}">
+    <link rel="stylesheet" href="../static/assets/css/time/style.css" th:href="@{/assets/css/time/style.css}">
+
+</head>
+<script type="module">
+    playBgm();
+
+    function playBgm() {
+        var music = document.getElementById("music");
+        if (music.paused) {
+            music.play();
+        }
+    }
+
+    document.onkeydown = function (e) {
+        var e = e || event;
+
+        switch (e.keyCode) {
+            case 32: //空格，
+                //播放背景音乐
+                playBgm();
+                break;
+            default:
+                break;
+        }
+
+
+    }
+</script>
+<body>
+
+<div class="clock">
+
+    <span class="cog hours tens" data-splitting>0123456789</span>
+    <span class="cog hours" data-splitting>0123456789</span>
+    <span class="colon">:</span>
+    <span class="cog minutes tens" data-splitting>0123456789</span>
+    <span class="cog minutes" data-splitting>0123456789</span>
+    <span class="colon">:</span>
+    <span class="cog seconds tens" data-splitting>0123456789</span>
+    <span class="cog seconds" data-splitting>0123456789</span>
+
+</div>
+<audio id="music" src="../static/assets/music/timer.mp3"
+       th:src="@{/assets/music/timer.mp3}" autoplay="autoplay" loop="loop">
+    你的浏览器不支持audio标签。
+</audio>
+
+
+<script src='../static/assets/js/time/splitting.js' th:src="@{/assets/js/time/splitting.js}"></script>
+<script src="../static/assets/js/time/script.js" th:src="@{/assets/js/time/script.js}"></script>
+<br/>
+<br/>
+<br/>
+<hr/>
+<div style="  text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';color:#ffffff">
+    <h2 th:text="${quote}">谁对时间最吝啬，时间对谁越慷慨。要时间不辜负你，首先你要不辜负时间。放弃时间的人，时间也放弃他。</h2>
+    <h2>活动即将开始，请耐心等待</h2>
+</div>
+</body>
+</html>

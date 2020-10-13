@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>抽奖</title>
+
+    <!-- 参考学习资料 https://flowers1225.com/lessons/2015/12/08/1 -->
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            /*background-color: #68217A;*/
+            background-color: #110117;
+            margin: 0;
+            font-family: Helvetica, sans-serif;;
+            overflow: hidden;
+        }
+
+        a {
+            color: #ffffff;
+        }
+
+        #info {
+            position: absolute;
+            width: 100%;
+            color: #ffffff;
+            padding: 5px;
+            font-family: Monospace;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 1;
+        }
+
+        #menu {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .element {
+            width: 120px;
+            height: 160px;
+            box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5);
+            border: 1px solid rgba(127, 255, 255, 0.25);
+            text-align: center;
+            cursor: default;
+        }
+
+        .element:hover {
+            box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.75);
+            border: 1px solid rgba(127, 255, 255, 0.75);
+        }
+
+        .element .number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: rgba(127, 255, 255, 0.75);
+        }
+
+        .element .symbol {
+            position: absolute;
+            top: 40px;
+            left: 0px;
+            right: 0px;
+            font-size: 60px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.75);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+        }
+
+        .element .details {
+            position: absolute;
+            bottom: 15px;
+            left: 0px;
+            right: 0px;
+            font-size: 12px;
+            color: rgba(127, 255, 255, 0.75);
+        }
+
+        button {
+            color: rgba(127, 255, 255, 0.75);
+            background: transparent;
+            outline: 1px solid rgba(127, 255, 255, 0.75);
+            border: 0px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgba(0, 255, 255, 0.5);
+        }
+
+        button:active {
+            color: #000000;
+            background-color: rgba(0, 255, 255, 0.75);
+        }
+    </style>
+</head>
+<body>
+<script src="js/three.min.js" th:src="@{/assets/js/index/three.min.js}"></script>
+<script src="js/tween.min.js" th:src="@{/assets/js/index/tween.min.js}"></script>
+<script src="js/TrackballControls.js" th:src="@{/assets/js/index/TrackballControls.js}"></script>
+<script src="js/CSS3DRenderer.js" th:src="@{/assets/js/index/CSS3DRenderer.js}"></script>
+
+<div id="container"></div>
+<!-- <div id="info"><a href="http://threejs.org" target="_blank">three.js css3d</a> - 元素周期表. <a href="http://www.htmleaf.com/" target="_blank">info</a>.</div> -->
+
+<!-- 隐藏功能按钮 -->
+<div id="menu" hidden>
+    <!--<button id="table">TABLE</button>-->
+    <button id="sphere">SPHERE</button>
+    <button id="helix">HELIX</button>
+    <button id="grid">GRID</button>
+    <button id="holdon">HOLDON</button>
+    <button id="moveCamera">moveCamera</button>
+    <button id="start">开始抽奖</button>
+    <button id="stop">停</button>
+
+</div>
+<audio id="music_pick" src="../static/assets/music/bgmusic_pick.mp3" th:src="@{/assets/music/bgmusic_pick.mp3}"
+       autoplay="" loop="loop">你的浏览器不支持audio标签。
+</audio>
+<audio id="music_normal" src="../static/assets/music/bgmusic_normal.mp3" th:src="@{/assets/music/bgmusic_normal.mp3}"
+       autoplay="" loop="loop">你的浏览器不支持audio标签。
+</audio>
+
+
+<script type="module">
+    // import * as THREE2 from './js/three.module.js';
+    // import Stats from './js/stats.module.js';
+
+
+    // var table = [
+    // 	1,"曹", "曹志坚", "2017010277",
+    // 	2,"耿", "手工耿", "4.002602",
+    // 	3,"Li", "Lithium", "6.941",
+    // 	4,"Be", "Beryllium", "9.012182",
+    // 	5,"B", "Boron", "10.811",
+    // 	6,"C", "Carbon", "12.0107",
+    // 	7,"N", "Nitrogen", "14.0067",
+    // 	8,"O", "Oxygen", "15.9994",
+    // 	9,"F", "Fluorine", "18.9984032",
+    // 	10,"Ne", "Neon", "20.1797",
+    // 	11,"Na", "Sodium", "22.98976...",
+    // 	12,"Mg", "Magnesium", "24.305",
+    // 	13,"Al", "Aluminium", "26.9815386",
+    // 	14,"Si", "Silicon", "28.0855",
+    // 	15,"P", "Phosphorus", "30.973762"
+    // ];
+
+    var table = [(${userStr})];
+
+    var camera, scene, renderer;
+    var controls;
+
+    var objects = [];
+    var targets = {sphere: [], helix: [], grid: []};
+    var screenRation = window.innerWidth / window.innerHeight;
+    var tableWidth = window.innerWidth;
+    var tableHeight = window.innerHeight;
+
+    //标记是否需要看某一个卡片
+    var isWatchCard = false;
+    //需要相机观看的卡片
+    var watchObj;
+    var isStop = false;
+
+
+    init();
+    animate();
+
+    function init() {
+
+        //相机： 透视相机，近大远小（视野，长宽比，远近面）
+        camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.z = 3000;
+
+        //构建场景
+        scene = new THREE.Scene();
+
+
+        // table
+
+        for (var i = 0; i < table.length; i += 4) {
+
+            var element = document.createElement('div');
+            element.className = 'element';
+            element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
+
+            var number = document.createElement('div');
+            number.className = 'number';
+            number.textContent = table[i];
+            element.appendChild(number);
+
+            var symbol = document.createElement('div');
+            symbol.className = 'symbol';
+            symbol.textContent = table[i + 1];
+            element.appendChild(symbol);
+
+            var details = document.createElement('div');
+            details.className = 'details';
+            details.innerHTML = table[i + 2] + '<br>' + table[i + 3];
+            element.appendChild(details);
+
+            var object = new THREE.CSS3DObject(element);
+            object.position.x = Math.random() * 4000 - 2000;
+            object.position.y = Math.random() * 4000 - 2000;
+            object.position.z = Math.random() * 4000 - 2000;
+            scene.add(object);
+
+            objects.push(object);
+
+            //
+
+            // var object = new THREE.Object3D();
+            // object.position.x = ( table[ i + 3 ] * 140 ) - 1330;
+            // object.position.y = - ( table[ i + 4 ] * 180 ) + 990;
+            //
+            // targets.table.push( object );
+
+        }
+
+        // sphere
+
+        var vector = new THREE.Vector3();
+
+        for (var i = 0, l = objects.length; i < l; i++) {
+
+            var phi = Math.acos(-1 + (2 * i) / l);
+            var theta = Math.sqrt(l * Math.PI) * phi;
+
+            var object = new THREE.Object3D();
+
+            object.position.x = 800 * Math.cos(theta) * Math.sin(phi);
+            object.position.y = 800 * Math.sin(theta) * Math.sin(phi);
+            object.position.z = 800 * Math.cos(phi);
+
+            vector.copy(object.position).multiplyScalar(2);
+            // vector.x=0;
+            // vector.y=0;
+            // vector.z=0;
+
+            object.lookAt(vector);
+
+            targets.sphere.push(object);
+
+        }
+
+        // helix
+
+        var vector = new THREE.Vector3();
+
+        for (var i = 0, l = objects.length; i < l; i++) {
+
+            var phi = i * 0.175 + Math.PI;
+
+            var object = new THREE.Object3D();
+
+            object.position.x = 900 * Math.sin(phi);
+            object.position.y = -(i * 8) + 450;
+            object.position.z = 900 * Math.cos(phi);
+
+            vector.x = object.position.x * 2;
+            vector.y = object.position.y;
+            vector.z = object.position.z * 2;
+
+            //test function lookAt()
+            // vector.x=0;
+            // vector.y=0;
+            // vector.z=0;
+
+            object.lookAt(vector);
+
+            targets.helix.push(object);
+
+        }
+
+        // grid
+
+        for (var i = 0; i < objects.length; i++) {
+
+            var object = new THREE.Object3D();
+
+            object.position.x = ((i % 5) * 400) - 800;
+            object.position.y = (-(Math.floor(i / 5) % 5) * 400) + 800;
+            object.position.z = (Math.floor(i / 25)) * 1000 - 2000;
+
+            targets.grid.push(object);
+
+        }
+
+        //渲染器
+        renderer = new THREE.CSS3DRenderer();
+        //设置画布大小
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.domElement.style.position = 'absolute';
+        //将图像添加至body中
+        document.getElementById('container').appendChild(renderer.domElement);
+
+        //鼠标控制
+        controls = new THREE.TrackballControls(camera, renderer.domElement);
+        controls.rotateSpeed = 0.5;
+        controls.minDistance = 500;
+        controls.maxDistance = 10000;
+        controls.addEventListener('change', render);
+
+        // var button = document.getElementById( 'table' );
+        // button.addEventListener( 'click', function ( event ) {
+        //
+        // 	transform( targets.table, 2000 );
+        //
+        // }, false );
+
+        var button = document.getElementById('sphere');
+        button.addEventListener('click', function (event) {
+
+            transform(targets.sphere, 2000);
+
+        }, false);
+
+        var button = document.getElementById('helix');
+        button.addEventListener('click', function (event) {
+
+            transform(targets.helix, 2000);
+
+        }, false);
+
+        var button = document.getElementById('grid');
+        button.addEventListener('click', function (event) {
+
+            transform(targets.grid, 2000);
+
+        }, false);
+
+
+        //hold on 按钮事件
+        var button = document.getElementById('holdon');
+        button.addEventListener('click', function (event) {
+            randomPosition(2000);
+        }, false);
+
+        //移动相机按钮事件
+        var button = document.getElementById("moveCamera");
+        button.addEventListener('click', function (event) {
+            moveCamera(objects[0], 2000, 20);
+        }, false);
+
+
+        //开始抽奖按钮监听事件
+        var button = document.getElementById("start");
+        button.addEventListener('click', function (event) {
+            startPick();
+        }, false);
+
+        //停止抽奖按钮监听事件
+        var button = document.getElementById("stop");
+        button.addEventListener('click', function (event) {
+            isStop = true;
+        }, false);
+
+
+        //键盘事件
+        document.onkeydown = function (e) {
+            var e = e || event;
+
+            switch (e.keyCode) {
+                case 32: //空格，抽奖
+                    startPick();
+                    //播放背景音乐
+                    playMusic();
+
+
+                    break;
+
+                case 49: // 1 table布局
+                    transform(targets.table, 2000);
+                    pauseMusic();
+                    break;
+                case 50: // 2 球形布局
+                    transform(targets.sphere, 2000);
+                    pauseMusic();
+                    break;
+                case 51:// 3 螺旋布局
+                    transform(targets.helix, 2000);
+                    pauseMusic();
+                    break;
+                case 52:// 4  网格布局
+                    transform(targets.grid, 2000);
+                    pauseMusic();
+                    break;
+                case 53:// 5 随机布局
+                    randomPosition(2000);
+                    pauseMusic();
+                    break;
+                // case 54:// 6 抽取编号为0的卡片
+                // 	moveCamera(objects[0],2000,20);
+                //
+                // 	break;
+
+                case 55: //7
+                    localHover(20000);
+                    pauseMusic();
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
+
+
+        //初始化完成后变成表格排列
+        transform(targets.sphere, 10000);
+
+        //
+
+        window.addEventListener('resize', onWindowResize, false);
+
+    }
+
+
+    function playMusic() {
+        var music_pick = document.getElementById('music_pick');
+        var music_normal = document.getElementById('music_normal');
+        if (music_pick.paused) {
+            music_pick.play();
+        }
+        music_normal.pause();
+    }
+
+    function pauseMusic() {
+        var music_pick = document.getElementById('music_pick');
+        var music_normal = document.getElementById('music_normal');
+        music_pick.pause();
+        if (music_normal.paused) {
+            music_normal.play();
+        }
+    }
+
+
+    //开始抽奖
+    //
+    function startPick() {
+
+        isStop = false;
+
+        var current = Math.floor(Math.random() * objects.length);
+
+        moveCamera(objects[current], 1000, 20);
+
+        // for (let index = 0; index < 5; index++) {
+        // 	current=Math.floor(Math.random()*objects.length);
+        // 	//
+        // 	console.log(current);
+        // 	setTimeout(moveCamera(objects[current],1000),1000)
+
+        // }
+
+
+        // while (!isStop) {
+        // 	current=Math.floor(Math.random()*objects.length);
+        // 	//
+        // 	console.log(current);
+        // 	setTimeout(moveCamera(objects[current],1000),1000)
+        // }
+
+    }
+
+
+    //原地漂浮效果
+    function localHover(duration) {
+
+        TWEEN.removeAll();
+
+        for (var i = 0; i < objects.length; i++) {
+
+
+            var object = objects[i];
+
+            new TWEEN.Tween(object.position)
+                .to({
+                    x: object.position.x + Math.random() * 8000 - 4000,
+                    y: object.position.y + Math.random() * 8000 - 4000,
+                    z: object.position.z + Math.random() * 8000 - 4000
+                }, Math.random() * duration + duration)
+                // .easing( TWEEN.Easing.Quadratic.Out )
+                // .repeat(Infinity).delay(200)
+                .start();
+
+            // object = objects[ Math.floor(Math.random()*objects.length) ];
+            // new TWEEN.Tween( object.rotation )
+            // 	.to( { x: object.rotation.x+Math.pi*2, y: object.rotation.y+Math.random()*Math.pi*3, z: object.rotation.z+Math.random()*Math.pi*4 }, Math.random() * duration + duration )
+            // 	.easing( TWEEN.Easing.Quadratic.Out )
+            // 	// .repeat(Infinity).delay(200)
+            // 	.start();
+
+        }
+
+        new TWEEN.Tween(this)
+            .to({}, duration * 2)
+            .onUpdate(render)
+            .start();
+
+    }
+
+
+    //移动相机
+    function moveCamera(obj, duration, circle) {
+        watchObj = obj;
+        isWatchCard = true;
+
+        // TWEEN.removeAll();
+
+        console.log("obj.position")
+        console.log(obj.position);
+        console.log("camera.position")
+        console.log(camera.position);
+        console.log("camera.rotation")
+        console.log(camera.rotation);
+        // console.log(obj.Vector3);
+
+        var vector = new THREE.Vector3();
+
+        //计算obj的法向量
+        // x=sinθ2  y=-sinθ2cosθ2 z=cosθ1cosθ2
+        let theta1 = obj.rotation.x;
+        let theta2 = obj.rotation.y;
+        let theta3 = obj.rotation.z;
+
+        vector.x = Math.sin(theta2);
+        vector.y = -Math.sin(theta1) * Math.cos(theta2);
+        vector.z = Math.cos(theta1) * Math.cos(theta2);
+
+        // console.log(vector);
+
+        // var tarCameraPos= new THREE.Vector3();
+        // tarCameraPos.x=obj.position.x+vector.x*500;
+        // tarCameraPos.y=obj.position.y+vector.y*500;
+        // tarCameraPos.z=obj.position.z+vector.z*500;
+
+        var tarCameraPos = new THREE.Object3D();
+        tarCameraPos.position.x = obj.position.x + vector.x * 500;
+        tarCameraPos.position.y = obj.position.y + vector.y * 500;
+        tarCameraPos.position.z = obj.position.z + vector.z * 500;
+        tarCameraPos.lookAt(obj.position);
+
+
+        console.log('tarCamera.position');
+        console.log(tarCameraPos.position);
+        console.log('tarCamera.rotation')
+        console.log(tarCameraPos.rotation);
+
+        //相机镜头位置补间动画
+        new TWEEN.Tween(camera.position)
+            .to({x: tarCameraPos.position.x, y: tarCameraPos.position.y, z: tarCameraPos.position.z}, duration)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .start();
+
+        //相机镜头方向补间动画
+        new TWEEN.Tween(camera.rotation)
+            .to({x: tarCameraPos.rotation.x, y: tarCameraPos.rotation.y, z: tarCameraPos.rotation.z}, duration)
+            .easing(TWEEN.Easing.Exponential.InOut)
+            .start();
+
+        //选中对象自身旋转补间动画
+        //只有沿三个轴的旋转角度同时为2π的整数倍，才能保证最后镜头正对卡片
+        new TWEEN.Tween(obj.rotation)
+            .to({
+                x: obj.rotation.x + Math.PI * circle,
+                y: obj.rotation.y + Math.PI * circle,
+                z: obj.rotation.z + Math.PI * circle
+            }, duration * 2)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .start();
+
+        //Quadratic.Out
+        //TWEEN.Easing.Exponential.InOut
+
+        new TWEEN.Tween(this)
+            .to({}, duration * 2)
+            .onUpdate(render)
+            .start();
+
+
+    }
+
+    /**
+     * 随机卡片位置
+     */
+    function randomPosition(duration) {
+
+        isWatchCard = false;
+        TWEEN.removeAll();
+
+        for (var i = 0; i < objects.length; i++) {
+
+            var object = objects[i];
+
+            new TWEEN.Tween(object.position)
+                .to({
+                    x: Math.random() * 4000 - 2000,
+                    y: Math.random() * 4000 - 2000,
+                    z: Math.random() * 4000 - 2000
+                }, Math.random() * duration + duration)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .start();
+
+            new TWEEN.Tween(object.rotation)
+                .to({
+                    x: Math.random() * object.rotation.x,
+                    y: Math.random() * object.rotation.y,
+                    z: Math.random() * object.rotation.z
+                }, Math.random() * duration + duration)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .start();
+
+        }
+
+        new TWEEN.Tween(this)
+            .to({}, duration * 2)
+            .onUpdate(render)
+            .start();
+
+    }
+
+
+    //场景切换函数
+    /**
+     * target 目标对象位置
+     * duration 动作持续时间
+     */
+    function transform(targets, duration) {
+        isWatchCard = false;
+        TWEEN.removeAll();
+
+        for (var i = 0; i < objects.length; i++) {
+
+            var object = objects[i];
+            var target = targets[i];
+
+            new TWEEN.Tween(object.position)
+                .to({
+                    x: target.position.x,
+                    y: target.position.y,
+                    z: target.position.z
+                }, Math.random() * duration + duration)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .start();
+
+            new TWEEN.Tween(object.rotation)
+                .to({
+                    x: target.rotation.x,
+                    y: target.rotation.y,
+                    z: target.rotation.z
+                }, Math.random() * duration + duration)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .start();
+
+        }
+
+        new TWEEN.Tween(this)
+            .to({}, duration * 2)
+            .onUpdate(render)
+            .start();
+
+    }
+
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        render();
+
+    }
+
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        TWEEN.update();
+
+        controls.update();
+
+    }
+
+
+    //渲染
+    function render() {
+
+        if (isWatchCard) {
+            camera.lookAt(watchObj.position);
+        } else {
+            var vector = new THREE.Vector3();
+            vector.x = 0;
+            vector.y = 0;
+            vector.z = 0;
+
+            camera.lookAt(vector)
+        }
+        renderer.render(scene, camera);
+
+
+    }
+
+</script>
+</body>
+</html>

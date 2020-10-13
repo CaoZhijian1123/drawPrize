@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../static/favicon.ico" th:href="@{/favicon.ico}">
+
+    <title>Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/assets/css/dashboard.css" th:href="@{/assets/css/dashboard.css}" rel="stylesheet">
+
+
+    <script type="text/javascript" src="../../static/assets/js/jquery.min.js"
+            th:src="@{/assets/js/jquery.min.js}"></script>
+
+
+</head>
+
+<body data-gr-c-s-loaded="true" onload="refresh()">
+
+
+<div th:replace="~{common/bar :: navbar}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="common/bar:: nav-sidebar(menu='activity') "></div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+            <h1 class="sub-header">修改活动</h1>
+            <br/><br/>
+
+
+            <div class="table-responsive">
+
+                <form action="/admin/activity" th:action="@{/admin/activity}" method="post">
+                    <input type="hidden" name="id" value="1" th:value="${activity.id}">
+                    <div class="form-group">
+                        <label>活动名</label>
+                        <input type="text" class="form-control" name="name" value="name" th:value="${activity.name}">
+                        <small class="form-text text-muted">给活动起个响亮的名字吧！</small>
+                    </div>
+                    <div class="form-group">
+                        <label>二维码链接地址</label>
+                        <input type="text" class="form-control" name="codeLink" value="link"
+                               th:value="${activity.codeLink}">
+                        <small class="form-text text-muted">二维码的链接</small>
+                    </div>
+                    <div class="form-group">
+                        <label>详细说明</label>
+                        <textarea type="text" rows="10" value="说明" class="form-control" name="note"
+                                  th:text="${activity.note}">
+                            说明
+                        </textarea>
+                        <small class="form-text text-muted">说明一下活动的细节吧！</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="./assets/js/jquery.min.js" th:src="@{/assets/js/jquery.min.js}"></script>
+<script>window.jQuery || document.write('<script src="../static/assets/js/jquery.min.js" th:src="@{/assets/js/jquery.min.js}"><\/script>')</script>
+<script src="../static/assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="../static/assets/js/holder.min.js" th:src="@{/assets/js/holder.min.js}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../static/assets/js/ie10-viewport-bug-workaround.js"
+        th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"></script>
+
+</body>
+</html>

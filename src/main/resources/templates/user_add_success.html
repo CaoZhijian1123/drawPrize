@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <link href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet">
+    <title>添加用户信息成功</title>
+</head>
+<body>
+<br>
+<div class="container">
+
+    <div class="alert alert-info" role="alert">
+        <h2>信息提交成功</h2>
+        <hr>
+        我们郑重承诺：填写的信息仅用于您的合法身份确认，我们不会向其他组织或个人泄露您的任何信息。
+        <br/>
+        提交成功后请不要重复提交信息或者提交虚假信息，一旦发现您有任何扰乱活动秩序的行为，我们将取消您的参与资格。
+    </div>
+
+    <div class="alert alert-success">
+        <div class="card-body" role="alert">
+            <div class="container">
+                <div class="card-title">
+
+                    <table>
+                        <tr>
+                            <td style="text-align-last: justify;text-align: center;text-align: justify; text-justify: distribute-all-lines">
+                                用户名：
+                            </td>
+                            <td th:text="${user.name}">张三</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align-last: justify;text-align: center;text-align: justify; text-justify: distribute-all-lines">
+                                学工号：
+                            </td>
+                            <td th:text="${user.studentId}">2017010277</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align-last: justify;text-align: center;text-align: justify; text-justify: distribute-all-lines">
+                                电话号码：
+                            </td>
+                            <td th:text="${user.tel}">12345678945</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align-last: justify;text-align: center;text-align: justify; text-justify: distribute-all-lines">
+                                常用邮件：
+                            </td>
+                            <td th:text="${user.mail}">qq</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align-last: justify;text-align: center;text-align: justify; text-justify: distribute-all-lines">
+                                抽奖序号：
+                            </td>
+                            <td th:text="${user.id}">0001</td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <h1 class="display-4" th:text="${user.uuid}">ABC234K5NCJVF</h1>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="alert alert-warning" role="alert">
+        <p class="lead">请尽快截屏保存以上信息,兑奖时请出示兑奖码</p>
+    </div>
+
+
+    <div class="jumbotron">
+        <h1 class="display-4">终于等到你</h1>
+        <p class="lead">欢迎参与清华大学第二十六届结构设计大赛，让我们重逢在天际云端!</p>
+        <hr class="my-4"/>
+        <p>清华大学结构设计大赛始创于1994年，迄今已历二十五届。经过二十多年的发展，大赛已经成为校内影响最大、参与人数最多的大规模科技赛事之一，在国内乃至国际工程教育界也具有一定的影响力。</p>
+        <a class="btn btn-primary btn-lg" href="https://mp.weixin.qq.com/s/4Ep3Cxrk7HuDF7ePE7ezqQ"
+           role="button">了解更多</a>
+    </div>
+
+</div>
+
+</body>
+</html>

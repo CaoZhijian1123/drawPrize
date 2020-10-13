@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.95.29.70:3306/caozj
+    username: caozj
+    password: MiymYrGmpWdkXmRY
+  transaction:
+    rollback-on-commit-failure: true
+  profiles:
+    active: dev
+#  transaction:
+#    rollback-on-commit-failure: true
+server:
+  tomcat:
+    resource:
+      allow-caching: false
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+<body>
+<br>
+<div class="container">
+
+    <table class="table">
+
+        <tbody>
+        <tr>
+            <td scope="row">
+
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/assets/img/prize.jpg" th:src="@{/assets/img/prize.jpg}" class="card-img-top"
+                         alt="抽奖">
+                    <div class="card-body">
+                        <h5 class="card-title">抽奖页面</h5>
+                        <p class="card-text">激动人心的抽奖页面，适合在现场大屏幕播放.</p>
+                        <a href="#" th:href="@{/pick}" class="btn btn-primary">前往</a>
+
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pick">
+                            说明
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="pick" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                             role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="pickLabel">抽奖页面说明</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        参与抽奖的人员信息会以卡片的形式出现在屏幕。<br>卡片的布局有4种：分别为球面布局、螺旋线布局、网格布局和随机布局。数字键2/3/4/5切换布局。<br>
+                                        数字键7卡片随机漂浮，持续20s<br>
+                                        空格键开始抽奖，随机抽取一位，同时会播放bgm,按任意布局按钮，bgm停止
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary">明白</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </td>
+            <td>
+
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/assets/img/time.jpg" th:src="@{/assets/img/time.jpg}" class="card-img-top"
+                         alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">时钟页面</h5>
+                        <p class="card-text">一个时钟，配合敲击音效，适合在比赛快开始时在现场播放.</p>
+                        <a href="#" th:href="@{/time}" class="btn btn-primary">前往</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#timer">
+                            说明
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="timer" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                             role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="timerLabel">计时器页面说明</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        一个时钟，配合敲击音效。空格键播放音效
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary">明白</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/assets/img/manager.jpg" th:src="@{/assets/img/manager.jpg}" class="card-img-top"
+                         alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">后台管理</h5>
+                        <p class="card-text">活动管理，活动信息，用户管理。</p>
+                        <a href="#" th:href="@{/admin}" class="btn btn-primary">前往</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#manager">
+                            说明
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="manager" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                             role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="managerLabel">后台管理说明</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        后台可以查看所有用户信息，手动删除、添加用户，修改用户信息（兑奖码不可以修改）<br>
+                                        开放或者关闭活动。活动关闭期间普通用户扫码后不可以提交信息<br>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary">明白</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td scope="row">
+
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/assets/img/info.jpg" th:src="@{/assets/img/info.jpg}" class="card-img-top"
+                         alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">信息填写</h5>
+                        <p class="card-text">和用户扫码后打开的填写页面相同，可以帮助没有带手机和无法扫码的用户现场填写信息。</p>
+                        <a href="#" th:href="@{/user}" class="btn btn-primary">前往</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#infoEdit">
+                            说明
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="infoEdit" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                             role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="infoEditLabel">信息填写页面说明</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        和用户扫码后打开的填写页面相同，可以帮助没有带手机和无法扫码的用户现场填写信息
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary">明白</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/assets/img/scan.jpg" th:src="@{/assets/img/scan.jpg}" class="card-img-top"
+                         alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">二维码</h5>
+                        <p class="card-text">展示二维码，适合现场等待时展示,使用“ctrl+滚轮”调节图片大小</p>
+                        <a href="#" th:href="@{/scan}" class="btn btn-primary">前往</a>
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/assets/img/team.jpg" th:src="@{/assets/img/team.jpg}" class="card-img-top"
+                         alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">联系主办方</h5>
+                        <p class="card-text">给主办方放邮件</p>
+                        <a href="mailto:cecmsast@163.com" class="btn btn-primary">前往</a>
+
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+
+                <div class="card" style="width: 18rem;">
+                    <img src="../static/assets/img/author.png" th:src="@{/assets/img/author.png}" class="card-img-top"
+                         alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">联系作者</h5>
+                        <p class="card-text">给作者发邮件</p>
+                        <a href="mailto:caozj17@mails.tsinghua.edu.cn" class="btn btn-primary">前往</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+
+
+</body>
+</html>

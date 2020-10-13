@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>信息填写</title>
+    <link href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<br>
+<div class="container">
+
+    <div class="alert alert-success" role="alert">
+        <h2>填写以下信息参与结赛抽奖</h2>
+        <hr>
+        我们郑重承诺：填写的信息仅用于您的合法身份确认，我们不会向其他组织或个人泄露您的任何信息。
+        <br/>
+        提交成功后请不要重复提交信息或者提交虚假信息，一旦发现您有任何扰乱活动秩序的行为，我们将取消您的参与资格。
+        <br/>
+        有任何疑问请咨询现场工作人员
+    </div>
+
+
+    <div class="alert alert-danger" role="alert" th:if="${msg!=null}">
+        <h2>信息提交失败</h2>
+        <hr>
+        失败原因
+        <br/>
+        <span th:text="${msg}" th:if="${msg!=null}">电话号码已注册</span>
+
+    </div>
+
+
+    <form action="/user" th:action="@{/user}" method="POST">
+
+        <!-- <input type="hidden" name="_method" value=""/> -->
+        <div class="form-group">
+            <label>用户名</label>
+            <input type="text" class="form-control" name="name"/>
+            <small class="form-text text-muted">您可以随便起一个有特点的名字</small>
+        </div>
+        <div class="form-group">
+            <label>学工号</label>
+            <input type="text" class="form-control" name="studentId"/>
+            <small class="form-text text-muted">用于确认您的身份</small>
+        </div>
+
+        <div class="form-group">
+            <label>电话号码</label>
+            <input type="tel" class="form-control" name="tel"/>
+            <small class="form-text text-muted">用于中奖后的奖品发放</small>
+        </div>
+
+        <div class="form-group">
+            <label>常用邮件</label>
+            <input type="email" class="form-control" name="mail">
+            <small class="form-text text-muted">用于中奖后的奖品发放</small>
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary">提交</button>
+    </form>
+    <div>
+        <br>
+    </div>
+
+
+    <div class="jumbotron">
+        <h1 class="display-4">终于等到你</h1>
+        <p class="lead" th:text="'欢迎参与'+${activity.name}">欢迎参与清华大学第二十六届结构设计大赛，让我们重逢在天际云端!</p>
+        <hr class="my-4">
+        <p th:text="${activity.note}">
+            清华大学结构设计大赛始创于1994年，迄今已历二十五届。经过二十多年的发展，大赛已经成为校内影响最大、参与人数最多的大规模科技赛事之一，在国内乃至国际工程教育界也具有一定的影响力。</p>
+        <a class="btn btn-primary btn-lg" href="https://mp.weixin.qq.com/s/4Ep3Cxrk7HuDF7ePE7ezqQ"
+           role="button">了解更多</a>
+    </div>
+
+</div>
+
+
+</body>
+</html>

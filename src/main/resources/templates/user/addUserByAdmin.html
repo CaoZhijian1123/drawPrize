@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../static/favicon.ico" th:href="@{/favicon.ico}">
+
+    <title>Dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/assets/css/dashboard.css" th:href="@{/assets/css/dashboard.css}" rel="stylesheet">
+
+
+    <script type="text/javascript" src="../static/assets/js/jquery.min.js"
+            th:src="@{/assets/js/jquery.min.js}"></script>
+
+
+</head>
+
+<body data-gr-c-s-loaded="true" onload="refresh()">
+
+
+<div th:replace="~{common/bar :: navbar}"></div>
+<!--<nav class="navbar navbar-inverse navbar-fixed-top" >-->
+<!--    <div class="container-fluid">-->
+<!--        <div class="navbar-header">-->
+<!--            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"-->
+<!--                    aria-expanded="false" aria-controls="navbar">-->
+<!--                <span class="sr-only">Toggle navigation</span>-->
+<!--                <span class="icon-bar"></span>-->
+<!--                <span class="icon-bar"></span>-->
+<!--                <span class="icon-bar"></span>-->
+<!--            </button>-->
+<!--            <a class="navbar-brand" href="#" th:text="${#session.getAttribute('user')}">Project name</a>-->
+<!--        </div>-->
+<!--        <div id="navbar" class="navbar-collapse collapse">-->
+<!--            <ul class="nav navbar-nav navbar-right">-->
+<!--                <li><a href="#">Dashboard</a></li>-->
+<!--                <li><a href="#">Settings</a></li>-->
+<!--                <li><a href="#">Profile</a></li>-->
+<!--                <li><a href="#">Help</a></li>-->
+<!--            </ul>-->
+<!--            <form class="navbar-form navbar-right">-->
+<!--                <input type="text" class="form-control" placeholder="Search...">-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="common/bar:: nav-sidebar(menu='users') "></div>
+
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+            <h1 class="sub-header" th:text="${user==null?'添加用户':'修改用户'}">添加用户</h1>
+            <br/><br/>
+
+            <div class="table-responsive">
+                <div class="alert alert-danger" role="alert" th:if="${msg!=null}">
+                    <h2>信息提交失败</h2>
+                    <hr>
+                    失败原因
+                    <br/>
+                    <span th:text="${msg}" th:if="${msg!=null}">电话号码已注册</span>
+
+                </div>
+
+
+                <form action="/admin/user" th:action="@{/admin/user}" method="POST">
+
+                    <input type="hidden" name="_method" value="put" th:if="${user!=null}"/>
+                    <input type="hidden" name="id" th:value="${user.id}" th:if="${user!=null}">
+                    <div class="form-group">
+                        <label>用户名</label>
+                        <input type="text" class="form-control" name="name" th:value="${user==null?'':user.name}"/>
+                        <small class="form-text text-muted">您可以随便起一个有特点的名字</small>
+                    </div>
+                    <div class="form-group">
+                        <label>学工号</label>
+                        <input type="text" class="form-control" name="studentId"
+                               th:value="${user==null?'':user.studentId}"/>
+                        <small class="form-text text-muted">用于确认您的身份</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>电话号码</label>
+                        <input type="tel" class="form-control" name="tel" th:value="${user==null?'':user.tel}"/>
+                        <small class="form-text text-muted">用于中奖后的奖品发放</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>常用邮件</label>
+                        <input type="email" class="form-control" name="mail" th:value="${user==null?'':user.mail}">
+                        <small class="form-text text-muted">用于中奖后的奖品发放</small>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary" th:text="${user==null?'提交':'修改'}">提交</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!--<script src="./assets/js/jquery.min.js" th:src="@{/assets/js/jquery.min.js}"></script>-->
+<script>window.jQuery || document.write('<script src="../static/assets/js/jquery.min.js" th:src="@{/assets/js/jquery.min.js}"><\/script>')</script>
+<script src="../static/assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="../static/assets/js/holder.min.js" th:src="@{/assets/js/holder.min.js}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../static/assets/js/ie10-viewport-bug-workaround.js"
+        th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"></script>
+
+
+</body>
+</html>

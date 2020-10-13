@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico" th:href="@{favicon.ico}">
+
+    <title>登录</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css"
+          th:href="@{/assets/css/ie10-viewport-bug-workaround.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./assets/css/signin.css" th:href="@{/assets/css/signin.css}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"
+            th:src="@{/assets/js/ie8-responsive-file-warning.js}"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"
+            th:src="@{/assets/js/ie-emulation-modes-warning.js}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+
+    <form class="form-signin" action="/admin/login" method="post">
+        <h2 class="form-signin-heading" th:text="#{login.tip}" align="center">Please sign in</h2>
+        <!--        判断是否有服务端的登录提示信息，有才显示-->
+        <span style="color: #FF0000 " th:text="${message}" th:if="${not #strings.isEmpty(message)}">提示信息</span>
+
+        <label for="inputEmail" class="sr-only" th:text="#{login.username}">User name</label>
+        <input type="text" name="username" id="inputEmail" class="form-control" th:placeholder="#{login.username}"
+               placeholder="User name" required autofocus>
+
+
+        <label for="inputPassword" class="sr-only" th:text="#{login.password}">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control"
+               th:placeholder="#{login.password}" placeholder="Password" required>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="remember-me"> [[#{login.remember}]]
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit" th:text="#{login.btn}">Sign in
+        </button>
+    </form>
+
+    <div align="center">
+        <!--        <span><a href="/login?l=zh_CN" th:href="@{/login(l='zh_CN')}">中文</a></span> &nbsp;&nbsp;&nbsp;&nbsp;-->
+        <!--        <span><a href="/login?l=en_US" th:href="@{/login(l='en_US')}">English</a></span>-->
+        <br/>
+
+
+    </div>
+
+</div> <!-- /container -->
+
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"
+        th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"></script>
+</body>
+</html>

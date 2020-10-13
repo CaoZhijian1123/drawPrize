@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 4.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.console.mapper.ActivityMapper">
+    <update id="update">
+        update activity set name =#{name},note=#{note},code_link=#{codeLink} where id = #{id}
+    </update>
+
+    <update id="setOpenCode">
+        update activity set open=#{code}
+    </update>
+
+
+    <select id="queryActivity" resultType="com.console.entity.Activity">
+        select * from activity
+    </select>
+</mapper>
